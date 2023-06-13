@@ -8,7 +8,6 @@ def decode_func(ciphertext, key):
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     plaintext = decryptor.update(ciphertext) + decryptor.finalize()
-
     unpadder = padding.PKCS7(128).unpadder()
     plaintext = unpadder.update(plaintext) + unpadder.finalize()
     return plaintext

@@ -11,7 +11,9 @@ def encode_func(text, key):
     padded_data = padder.update(text) + padder.finalize()
     print("Padded:", padded_data)
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
-    return ciphertext
+    iv = cipher.generate_iv()
+
+    return iv + ciphertext
 
 
 
