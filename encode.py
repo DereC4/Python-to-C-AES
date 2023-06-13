@@ -3,7 +3,8 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 
 def encode_func(text, key):
-    cipher = Cipher(algorithms.AES(key), modes.CBC())
+    iv = os.urandom(16)
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
 
     # Pad plaintext
@@ -11,9 +12,7 @@ def encode_func(text, key):
     padded_data = padder.update(text) + padder.finalize()
     print("Padded:", padded_data)
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
-    iv = cipher.generate_iv()
-
-    return iv + ciphertext
+    return ciphertext
 
 
 
