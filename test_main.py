@@ -1,11 +1,9 @@
 import encode
 import decode
-import secrets
 
-key = secrets.token_bytes(32)  # 32 bytes = 256 bits
-
-print(key)
+key = b'ThisIsASecretKeyForAES256'
 plaintext = b'Hello World'
+
 print("Plaintext:", plaintext)
 ciphertext = encode.encode_func(plaintext, key)
 print("Ciphertext:", ciphertext)

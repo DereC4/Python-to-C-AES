@@ -9,6 +9,6 @@ def decode_func(ciphertext, key):
     decryptor = cipher.decryptor()
     plaintext = decryptor.update(ciphertext) + decryptor.finalize()
 
-    # unpadder = padding.PKCS7(256).unpadder()
-    # plaintext = unpadder.update(plaintext) + unpadder.finalize()
+    unpadder = padding.PKCS7(128).unpadder()
+    plaintext = unpadder.update(plaintext) + unpadder.finalize()
     return plaintext
