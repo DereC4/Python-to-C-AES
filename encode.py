@@ -4,14 +4,14 @@ from cryptography.hazmat.primitives import padding
 
 def encode_func(text, key):
     iv = os.urandom(16)
-    print("IV: ", iv)
+    # print("IV: ", iv)
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
 
     # Pad plaintext
     padder = padding.PKCS7(128).padder()
     padded_data = padder.update(text) + padder.finalize()
-    print("Padded:", padded_data)
+    # print("Padded:", padded_data)
     ciphertext = iv + encryptor.update(padded_data) + encryptor.finalize()
     return ciphertext
 

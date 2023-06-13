@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives import padding
 
 key = b'\x01\x23\x45\x67\x89\xab\xcd\xef\xfe\xdc\xba\x98\x76\x54\x32\x10' \
       b'\x01\x23\x45\x67\x89\xab\xcd\xef\xfe\xdc\xba\x98\x76\x54\x32\x10'
-plaintext = b'Hello World'
+plaintext = b'Your next line is...'
 
 print("Plaintext:", plaintext)
 ciphertext = encode.encode_func(plaintext, key)
