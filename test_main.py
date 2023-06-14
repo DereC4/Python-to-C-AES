@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives import padding
 key = b'\x01\x23\x45\x67\x89\xab\xcd\xef\xfe\xdc\xba\x98\x76\x54\x32\x10' \
       b'\x01\x23\x45\x67\x89\xab\xcd\xef\xfe\xdc\xba\x98\x76\x54\x32\x10'
 plain_text = b'Your next line is...'
+plain_text = open("toEncode.txt", "rb").read()
 
 print("Plaintext:", plain_text)
 cipher_text = encode.encode_func(plain_text, key)
