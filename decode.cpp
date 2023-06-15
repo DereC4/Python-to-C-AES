@@ -2,6 +2,8 @@
 #include <openssl/rand.h>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <vector>
 
 /**
  * @brief  Decrypts the given AES ciphertext using the provided key
@@ -27,11 +29,30 @@ int remove_padding(unsigned char* decrypted_text, int text_length) {
     return new_length;
 }
 
+unsigned char* readInCipher() {
+    std::ifstream file("cipher.txt", std::ios::binary);
+    if (!file) {
+        std::cerr << "Failed to open file: " << "cipher.txt" << std::endl;
+        return nullptr;
+    }
+
+    // Get the file size
+    file.seekg(0, std::ios::end);
+    size_t file_size = static_cast<size_t>(file.tellg());
+    file.seekg(0, std::ios::beg);
+
+    uint8_t file_array[file_size];
+
+    if (!file.read(reinterpret_cast<char*>(file_array), file_size)) {
+        std::cerr << "Failed to read file: " << "cipher.txt" << std::endl;
+        delete[] file_array;
+        return nullptr;
+    }
+    return file_array;
+}
+
 int main() {
-    unsigned char ciphertext[32] = { 0x4F, 0x6D, 0x61, 0x65, 0x20, 0x77, 0x61, 0x20,
-                            0x6D, 0x6F, 0x75, 0x20, 0x73, 0x68, 0x69, 0x6E,
-                            0x84, 0x59, 0x37, 0x60, 0x05, 0x4C, 0xE5, 0xB8,
-                            0xBB, 0xAE, 0xEB, 0xF7, 0x51, 0x64, 0xC1, 0xD9};
+    unsigned char* ciphertext = readInCipher(); 
     unsigned char key[32]= { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
                     0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
