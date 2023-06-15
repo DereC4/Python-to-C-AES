@@ -1,26 +1,52 @@
-import encode
-import decode
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.primitives import padding
+#include <openssl/aes.h>
+#include <openssl/rand.h>
+#include <iostream>
+#include <string>
 
-### Test 1
+/**
+ * @brief  Decrypts the given AES ciphertext using the provided key
+ * 
+ */
+void aes_256_decrypt(unsigned char *ciphertext, unsigned char *key, unsigned char *iv, unsigned char *plaintext) {
+    AES_KEY aes_key;
+    AES_set_decrypt_key(key, 256, &aes_key);
+    AES_cbc_encrypt(ciphertext, plaintext, AES_BLOCK_SIZE, &aes_key, iv, AES_DECRYPT);
+}
 
-key = b'\x01\x23\x45\x67\x89\xab\xcd\xef\xfe\xdc\xba\x98\x76\x54\x32\x10' \
-      b'\x01\x23\x45\x67\x89\xab\xcd\xef\xfe\xdc\xba\x98\x76\x54\x32\x10'
-plain_text = open("toEncode", "rb").read()
 
-# print("Plaintext:", plain_text)
-cipher_text = encode.encode_func(plain_text, key)
-# print("Ciphertext:", cipher_text)
+/**
+ * @brief Removes PKCS7 padding from the decrypted text
+ * 
+ * @param decrypted_text 
+ * @param text_length 
+ * @return int 
+ */
+int remove_padding(unsigned char* decrypted_text, int text_length) {
+    int padding = decrypted_text[text_length - 1];
+    int new_length = text_length - padding;
+    return new_length;
+}
 
-# Open the file in write mode
-with open("cipher.txt", "wb") as file:
-    file.write(cipher_text)
-    print("Cipher text saved to file.")
+int main() {
+    unsigned char ciphertext[32] = { 0x4F, 0x6D, 0x61, 0x65, 0x20, 0x77, 0x61, 0x20,
+                            0x6D, 0x6F, 0x75, 0x20, 0x73, 0x68, 0x69, 0x6E,
+                            0x84, 0x59, 0x37, 0x60, 0x05, 0x4C, 0xE5, 0xB8,
+                            0xBB, 0xAE, 0xEB, 0xF7, 0x51, 0x64, 0xC1, 0xD9};
+    unsigned char key[32]= { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
+                    0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
+                    0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
+                    0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
+    unsigned char plaintext[AES_BLOCK_SIZE];
+    uint8_t iv[16];
+    for (int i = 0; i < 16; i++) {
+        iv[i] = 0;
+    }
 
-decrypted_text = decode.decode_func(cipher_text, key)
-# print("Decrypted Text:", decrypted_text)
+    aes_256_decrypt(ciphertext, key, iv, plaintext);
 
-with open("decoded", "wb") as file:
-    file.write(decrypted_text)
-    print("Decrypted file")
+    /* Show the decrypted text */
+    printf("Decrypted text: %s\n", plaintext);
+
+
+    return 0;
+}
