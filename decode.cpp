@@ -17,10 +17,12 @@ void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *k
     // AES_set_decrypt_key(key, 256, &aes_key);
     // AES_cbc_encrypt(ciphertext, plaintext, AES_BLOCK_SIZE, &aes_key, iv, AES_DECRYPT);
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
-    EVP_CIPHER_CTX_set_padding(ctx, 128);
+    EVP_CIPHER_CTX_set_padding(ctx, 1);
     EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv);
     EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, cipher_len);
     EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
+    EVP_CIPHER_CTX_free(ctx);
+
 }
 
 int main() {
