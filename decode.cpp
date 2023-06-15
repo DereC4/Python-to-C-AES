@@ -15,27 +15,6 @@ void aes_256_decrypt(unsigned char *ciphertext, unsigned char *key, unsigned cha
     AES_cbc_encrypt(ciphertext, plaintext, AES_BLOCK_SIZE, &aes_key, iv, AES_DECRYPT);
 }
 
-// unsigned char* readInCipher() {
-//     std::ifstream file("cipher.txt", std::ios::binary);
-//     if (!file) {
-//         std::cerr << "Failed to open file: " << "cipher.txt" << std::endl;
-//         return nullptr;
-//     }
-
-//     // Get the file size
-//     file.seekg(0, std::ios::end);
-//     size_t file_size = static_cast<size_t>(file.tellg());
-//     file.seekg(0, std::ios::beg);
-
-//     uint8_t file_array[file_size];
-
-//     if (!file.read(reinterpret_cast<char*>(file_array), file_size)) {
-//         std::cerr << "Failed to read file: " << "cipher.txt" << std::endl;
-//         return nullptr;
-//     }
-//     return file_array;
-// }
-
 int main() {
     std::ifstream file("cipher.txt", std::ios::in | std::ios::binary);
     
