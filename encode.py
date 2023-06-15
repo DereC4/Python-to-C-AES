@@ -14,7 +14,7 @@ def encode_func(text, key):
     padder = padding.PKCS7(128).padder()
     padded_data = padder.update(text) + padder.finalize()
     # print("Padded:", padded_data)
-    ciphertext = iv + encryptor.update(padded_data) + encryptor.finalize()
+    ciphertext = encryptor.update(padded_data) + encryptor.finalize()
     return ciphertext
 
 

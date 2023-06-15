@@ -18,6 +18,8 @@ with open("cipher.txt", "wb") as file:
     file.write(cipher_text)
     print("Cipher text saved to file.")
 
+# cipher_text = open("cipher.txt", "rb").read();
+
 decrypted_text = decode.decode_func(cipher_text, key)
 # print("Decrypted Text:", decrypted_text)
 

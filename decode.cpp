@@ -15,20 +15,6 @@ void aes_256_decrypt(unsigned char *ciphertext, unsigned char *key, unsigned cha
     AES_cbc_encrypt(ciphertext, plaintext, AES_BLOCK_SIZE, &aes_key, iv, AES_DECRYPT);
 }
 
-
-/**
- * @brief Removes PKCS7 padding from the decrypted text
- * 
- * @param decrypted_text 
- * @param text_length 
- * @return int 
- */
-int remove_padding(unsigned char* decrypted_text, int text_length) {
-    int padding = decrypted_text[text_length - 1];
-    int new_length = text_length - padding;
-    return new_length;
-}
-
 // unsigned char* readInCipher() {
 //     std::ifstream file("cipher.txt", std::ios::binary);
 //     if (!file) {
@@ -60,15 +46,6 @@ int main() {
 
     unsigned char ciphertext[file_size];
     file.read((char *) ciphertext, file_size);
-
-
-
-
-
-
-
-
-
 
     unsigned char key[32]= { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
