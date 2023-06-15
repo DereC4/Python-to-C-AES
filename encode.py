@@ -3,7 +3,9 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 
 def encode_func(text, key):
-    iv = os.urandom(16)
+    # IV is temporary a set
+    # iv = os.urandom(16)
+    iv = b'\x00' * 16
     # print("IV: ", iv)
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
