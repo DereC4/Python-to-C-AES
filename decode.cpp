@@ -55,7 +55,7 @@ int main() {
     
     // Get file size
     file.seekg(0, std::ios::end);
-    std::streampos file_size = file.tellg();
+    uint8_t file_size = file.tellg();
     file.seekg(0, std::ios::beg);
 
     unsigned char ciphertext[file_size];
