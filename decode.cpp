@@ -53,9 +53,9 @@ int remove_padding(unsigned char* decrypted_text, int text_length) {
 int main() {
     std::ifstream ifs("cipher.txt", std::ios::binary|std::ios::ate);
     std::ifstream::pos_type pos = ifs.tellg();
-    unsigned char *ciphertext[pos];
+    unsigned char * ciphertext[pos];
     ifs.seekg(0, std::ios::beg);
-    ifs.read(&ciphertext[0], pos);
+    ifs.read((char *) ciphertext[0], pos);
 
     unsigned char key[32]= { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
@@ -68,7 +68,7 @@ int main() {
         iv[i] = 0;
     }
 
-    aes_256_decrypt(ciphertext, key, iv, plaintext);
+    aes_256_decrypt(*ciphertext, key, iv, plaintext);
 
     /* Show the decrypted text */
     printf("Decrypted text: %s\n", plaintext);
