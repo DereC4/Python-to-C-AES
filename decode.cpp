@@ -32,11 +32,17 @@ void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *k
 }
 
 int main() {
-    std::ifstream file("cipher.txt", std::ios::in | std::ios::binary);
+    // Get first line (length), then read the rest of the cipher in
+    std::ifstream file("output/cipher.txt", std::ios::in | std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open the file." << std::endl;
+        return 1;
+    }
     std::string temp;
     std::getline(file, temp);
-    int pay_len = std::stoi(temp);
-    std::cout << pay_len;
+    std::cout << "Payload Size: " << temp << std::endl;
+    int length = std::stoi(temp);
+    printf("%d\n", length);
 
     // Get file size
     uint8_t begin = file.tellg();
