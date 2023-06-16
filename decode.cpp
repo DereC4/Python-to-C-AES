@@ -33,13 +33,18 @@ void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *k
 
 int main() {
     std::ifstream file("cipher.txt", std::ios::in | std::ios::binary);
-    
+    std::string temp;
+    std::getline(file, temp);
+    int pay_len = std::stoi(temp);
+    std::cout << pay_len;
+
     // Get file size
     uint8_t begin = file.tellg();
     file.seekg (0, std::ios::end);
     uint8_t end = file.tellg();
     uint8_t file_size = (end-begin);
     file.seekg(0, std::ios::beg);
+    std::getline(file, temp);
 
     // Read in file
     unsigned char ciphertext[file_size];
