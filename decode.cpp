@@ -11,7 +11,7 @@
  * @brief  Decrypts the given AES ciphertext using the provided key
  * 
  */
-void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *key, unsigned char *iv, unsigned char *plaintext) {
+void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *key, unsigned char *iv, unsigned char *plaintext, int payload_size) {
     AES_KEY aes_key;
     int len;
     int padding; 
@@ -25,10 +25,8 @@ void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *k
     EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, cipher_len);
     EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
     EVP_CIPHER_CTX_free(ctx);   
-    unsigned char paddingSize = plaintext[cipher_len];
-    printf("%d\n", paddingSize);
-    printf("Decrypted text: %s\n", plaintext);
-    plaintext[cipher_len] = '\0';
+    printf("Before null terminator text: %s\n", plaintext);
+    plaintext[payload_size] = '\0';
 }
 
 int main() {
@@ -45,34 +43,47 @@ int main() {
     int payload_size = std::stoi(temp);
     printf("Payload Size: %d\n", payload_size);
 
-    // Get file size
+    // Get file length
     // uint8_t begin = file.tellg();
     // file.seekg (0, std::ios::end);
     // uint8_t end = file.tellg();
     // uint8_t file_size = (end-begin);
     // file.seekg(0, std::ios::beg);
     // std::getline(file, temp);
+    // printf("Filesize: %d\n", file_size);
+        // Collect file contents into a character array
+    // Get the length of the file
+
+    // Read the remaining file contents into a vector<char>
+    std::vector<char> data(
+        (std::istreambuf_iterator<char>(file)),
+        (std::istreambuf_iterator<char>())
+    );
+
+    // Convert the vector<char> to a char array
+    char* cipher_text = data.data();
+    size_t dataSize = data.size();
+    printf("%s\n", cipher_text);
+    printf("%d\n", dataSize);
 
     // Read in file. Padding should now be taken care of
-    unsigned char ciphertext[payload_size];
-    file.read((char *) ciphertext, payload_size);
-    file.close();
-    // printf("Filesize: %d\n", file_size);
+    // unsigned char ciphertext[file_size];
+    // file.read((char *) ciphertext, file_size);
+    // file.close();
 
     unsigned char key[32]= { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
                     0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
-
     unsigned char plaintext[payload_size];
     uint8_t iv[16];
     for (int i = 0; i < 16; i++) {
         iv[i] = 0;
     }
 
-    aes_256_decrypt(ciphertext, (int) payload_size, key, iv, plaintext);
+    aes_256_decrypt((unsigned char*)cipher_text, (int) dataSize, key, iv, plaintext, payload_size);
 
-    /* Show the decrypted text */
+    // /* Show the decrypted text */
     printf("Decrypted text: %s\n", plaintext);
     return 0;
 }
