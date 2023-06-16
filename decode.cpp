@@ -24,15 +24,18 @@ void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *k
     EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, cipher_len);
     EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
     EVP_CIPHER_CTX_free(ctx);   
-    plaintext[len] = '\0';
+    printf("Decrypted text: %s\n", plaintext);
+    plaintext[cipher_len] = '\0';
 }
 
 int main() {
     std::ifstream file("cipher.txt", std::ios::in | std::ios::binary);
     
     // Get file size
-    file.seekg(0, std::ios::end);
-    uint8_t file_size = file.tellg();
+    uint8_t begin = file.tellg();
+    file.seekg (0, std::ios::end);
+    uint8_t end = file.tellg();
+    uint8_t file_size = (end-begin);
     file.seekg(0, std::ios::beg);
 
     // Read in file
@@ -46,7 +49,7 @@ int main() {
                     0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
-    unsigned char plaintext[file_size];
+    unsigned char plaintext[AES_BLOCK_SIZE];
     uint8_t iv[16];
     for (int i = 0; i < 16; i++) {
         iv[i] = 0;
