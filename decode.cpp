@@ -11,7 +11,7 @@
  * @brief  Decrypts the given AES ciphertext using the provided key
  * 
  */
-void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *key, unsigned char *iv, unsigned char *plaintext) {
+void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *key, unsigned char *iv, unsigned char *plaintext, int payload_len) {
     AES_KEY aes_key;
     int len;
     int padding; 
@@ -28,7 +28,7 @@ void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *k
     unsigned char paddingSize = plaintext[cipher_len];
     printf("%d\n", paddingSize);
     printf("Decrypted text: %s\n", plaintext);
-    plaintext[cipher_len] = '\0';
+    plaintext[payload_len] = '\0';
 }
 
 int main() {
@@ -40,9 +40,9 @@ int main() {
     }
     std::string temp;
     std::getline(file, temp);
-    std::cout << "Payload Size: " << temp << std::endl;
+    // std::cout << "Payload Size: " << temp << std::endl;
     int length = std::stoi(temp);
-    printf("%d\n", length);
+    printf("Payload Size: %d\n", length);
 
     // Get file size
     uint8_t begin = file.tellg();
@@ -63,13 +63,13 @@ int main() {
                     0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
-    unsigned char plaintext[file_size];
+    unsigned char plaintext[length];
     uint8_t iv[16];
     for (int i = 0; i < 16; i++) {
         iv[i] = 0;
     }
 
-    aes_256_decrypt(ciphertext, (int) file_size, key, iv, plaintext);
+    aes_256_decrypt(ciphertext, (int) file_size, key, iv, plaintext, length);
 
     /* Show the decrypted text */
     printf("Decrypted text: %s\n", plaintext);
