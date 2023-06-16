@@ -1,7 +1,9 @@
+from pydoc import plain
 import encode
 import decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
+import struct
 
 ### Test 1
 
@@ -15,6 +17,10 @@ cipher_text = encode.encode_func(plain_text, key)
 
 # Open the file in write mode
 with open("cipher.txt", "wb") as file:
+    # Write the length of the text as the first line
+    temp = struct.pack('>i', len(plain_text))
+    file.write(temp)
+    file.write(b'\n')
     file.write(cipher_text)
     print("Cipher text saved to file.")
 

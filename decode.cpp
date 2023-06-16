@@ -20,10 +20,13 @@ void aes_256_decrypt(unsigned char *ciphertext, int cipher_len, unsigned char *k
     // AES_cbc_encrypt(ciphertext, plaintext, AES_BLOCK_SIZE, &aes_key, iv, AES_DECRYPT);
     
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    EVP_CIPHER_CTX_set_padding(ctx, 1);
     EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv);
     EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, cipher_len);
     EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
     EVP_CIPHER_CTX_free(ctx);   
+    unsigned char paddingSize = plaintext[cipher_len];
+    printf("%d\n", paddingSize);
     printf("Decrypted text: %s\n", plaintext);
     plaintext[cipher_len] = '\0';
 }
@@ -49,7 +52,7 @@ int main() {
                     0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10};
 
-    unsigned char plaintext[AES_BLOCK_SIZE];
+    unsigned char plaintext[file_size];
     uint8_t iv[16];
     for (int i = 0; i < 16; i++) {
         iv[i] = 0;
