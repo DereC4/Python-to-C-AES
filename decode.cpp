@@ -35,12 +35,11 @@ int main() {
     uint8_t file_size = file.tellg();
     file.seekg(0, std::ios::beg);
 
+    // Read in file
     unsigned char ciphertext[file_size];
-    // ciphertext[file_size] = '\0';
     file.read((char *) ciphertext, file_size);
     file.close();
-    printf("FileSize %d\n", file_size);
-    // printf("%s", ciphertext);
+    printf("Filesize: %d\n", file_size);
 
     unsigned char key[32]= { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
                     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
@@ -57,7 +56,5 @@ int main() {
 
     /* Show the decrypted text */
     printf("Decrypted text: %s\n", plaintext);
-
-
     return 0;
 }
